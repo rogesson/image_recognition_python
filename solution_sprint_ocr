@@ -1,0 +1,28 @@
+- [Todos] Prints de Novas fiscais
+- [Roger] Ler informações das NF:
+    quantidade
+    [OK] Nome do local (estabelecimento),
+    [OK] Endereço do local
+    CNPJ (melhorar UF)
+    [OK] produtos comprados
+    [OK] forma de pagamento
+    [OK] consumidor
+    [OK] valor total
+- [Roger] Rotacionar imagem e melhorar leitura das NF
+- [Gabs] Ferramentas de codificação em par
+- [Jesse] Como deve ser entregue o projeto
+- [Todos] Definir se será via console ou Web ou Mobile - Ver com o professor
+
+Código fonte: https://github.com/rogesson/image_recognition_python
+
+Proxima reunião segunda-feira: 19:00 (startup one)
+Proxima reunião terça-feira: 19:00 (solution sprint)
+
+- SETUP
+python 3.x
+https://pypi.org/project/pytesseract/
+https://pypi.org/project/Pillow/
+
+Mentoria: 29/09/2021
+Apresentação: 13/10/2021
+Entrega dia: 17/10/2021
