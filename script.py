@@ -1,17 +1,25 @@
 import cv2
 import sys
 import pytesseract
-import re
 
 def read_image(img_name):
     img_name = sys.argv[1]
 
     img = cv2.imread(img_name)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    img = cv2.resize(img, None, fx=2, fy=2)
+
     custom_config = r'--oem 3 --psm 6'
 
-    threshold_img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
-    details = pytesseract.image_to_data(threshold_img, output_type='dict', config=custom_config, lang='por')
+    #cv2.imshow("Threshold", img)
+
+    details = pytesseract.image_to_data(
+        img,
+        output_type='dict',
+        config=custom_config,
+        lang='por'
+    )
+
     text = details['text']
 
     text = list(map(str.upper, text))
@@ -24,11 +32,6 @@ def read_image(img_name):
         if len(splited) > 1:
             for w in splited:
                 text.append(w)
-
-    #QTD
-    #r = re.compile("*.UN")
-    #xx = list(filter(r.match, text))
-    #print(xx)
 
     return text
 
@@ -44,9 +47,19 @@ def find_text(word):
         None
 
 def item(text):
+    index = find_text('PRODUTOS')
+    product_text = text[index:]
+
+    index = find_text('NN')
+    if index:
+        index_end = find_text('TOTAL')
+        name = ' '.join(text[index+1:index_end])
+        return [1, 1, name]
+
     index = find_text('001')
     if index:
         return text[index:index+3]
+
 
 def item_detail(item):
     if item:
@@ -67,9 +80,25 @@ def location(text):
 
 def cnpj(text):
     index = find_text('CNPJ')
+    index_end = text.index('1E:66994360-NO')
+    if index and index_end:
+        return ''.join(text[index +1])
+
+def customer(text):
+    index = find_text('consumidor')
     if index:
-        index_end = text.index('UR:SA')
-        return ''.join(text[index +1:index_end -1])
+        return ''.join(text[index+1])
+
+    index = find_text('destinatário:')
+    if index:
+        index = find_text('destinatário:')
+        index_end = find_text('DESCRIÇÃO')
+        return ' '.join(text[index+1:index_end])
+
+def total(text):
+    index = find_text('total')
+    if index:
+        return ''.join(text[index+2])
 
 if __name__ == "__main__":
     img_name = sys.argv[1]
@@ -78,16 +107,14 @@ if __name__ == "__main__":
 
     print(text)
     print('---------------')
-    total = find_text('total')
-    customer = find_text('consumidor')
     payment = payment(text)
     item = item(text)
     #qtd = find_text('un')
     print('Estabelecimento: %s' % establishment(text))
     print('Endereço: %s' % location(text))
     print('CNPJ: %s' % cnpj(text))
-    print('Consumidor %s' % customer)
-    print('Valor total: %s' % total)
+    print('Consumidor: %s' % customer(text))
+    print('Valor total: R$ %s' % total(text))
     print('Forma de pagamento: %s' % payment)
     item_detail(item)
 
