@@ -9,10 +9,9 @@ def read_image(img_name):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     img = cv2.resize(img, None, fx=2, fy=2)
 
+    cv2.imshow("IMG", img)
+
     custom_config = r'--oem 3 --psm 6'
-
-    #cv2.imshow("Threshold", img)
-
     details = pytesseract.image_to_data(
         img,
         output_type='dict',
@@ -25,6 +24,7 @@ def read_image(img_name):
     text = list(map(str.upper, text))
 
     text = list(filter(None, text))
+
     clean_text = []
     dup_text = text.copy()
     for t in dup_text:
@@ -35,16 +35,16 @@ def read_image(img_name):
 
     return text
 
-def payment(text):
-    if 'DINHEIRO' in text:
-        return 'DINHEIRO'
-
 def find_text(word):
     try:
         word = word.upper()
         return text.index(word)
     except ValueError:
         None
+
+def payment(text):
+    if 'DINHEIRO' in text:
+        return 'DINHEIRO'
 
 def item(text):
     index = find_text('PRODUTOS')
@@ -59,7 +59,6 @@ def item(text):
     index = find_text('001')
     if index:
         return text[index:index+3]
-
 
 def item_detail(item):
     if item:
@@ -109,20 +108,14 @@ if __name__ == "__main__":
     print('---------------')
     payment = payment(text)
     item = item(text)
-    #qtd = find_text('un')
     print('Estabelecimento: %s' % establishment(text))
     print('Endereço: %s' % location(text))
     print('CNPJ: %s' % cnpj(text))
     print('Consumidor: %s' % customer(text))
-    print('Valor total: R$ %s' % total(text))
+    print('Valor anual: R$ %s' % total(text))
     print('Forma de pagamento: %s' % payment)
     item_detail(item)
 
     cv2.waitKey(0)
 
     cv2.destroyAllWindows()
-
-#cv2.imshow('threshold image', threshold_img)
-#cv2.imshow("test", img)
-#image_text = pytesseract.image_to_string(thresholding, lang='por', config=custom_config)
-#print(image_text)
