@@ -36,18 +36,14 @@ O script além de exibir na tela os dados, também captura em variáveis para qu
 sejam trabalhados, como o valor total ou a forma de pagamento utilizada.
 
 # Descrição
-1 - Leitura da imagem com CV2
-2 - Alteração da cor de fundo para cinza
-3 - Redimencionamento da imagem no eixo vertical e horizontal em 2x
-4 - opcional (exibição da imagem)
-5 - Configurações:
+1. Leitura da imagem com CV2
+2. Alteração da cor de fundo para cinza
+3. Redimencionamento da imagem no eixo vertical e horizontal em 2x
+4. Opcional (exibição da imagem)
+5. Configurações:
   oem 3 = (OCR Engine modes) valor 3 para utilizar o padrão
   psm 6 = (Page segmentation modes) valor 7 para assumir um único bloco de texto uniforme
   output_type = dict: Leitura da imagem e transformação em uma lista (array)
   lang = por: Dicionário em Português para palavras com acento
-6 - função 'find_text': procura uma palavra na lista de palavras e retorna a posição correspondente
+6. A função 'find_text': procura uma palavra na lista de palavras e retorna a posição correspondente
 
-
-Fazer:
-  colocar valor unitario de cada item
-  flag de exibir imagem: true ou false
